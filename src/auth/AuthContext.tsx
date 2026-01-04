@@ -47,7 +47,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const login = () => {
-    void userManager.signinRedirect();
+    void userManager
+      .clearStaleState()
+      .then(() => userManager.signinRedirect())
+      .catch(() => {
+        // If state cleanup fails, still attempt to redirect.
+        void userManager.signinRedirect();
+      });
   };
 
   const logout = () => {

@@ -16,6 +16,7 @@ export const userManager = new UserManager({
   post_logout_redirect_uri: `${appOrigin}/logout-callback`,
   silent_redirect_uri: `${appOrigin}/silent-renew`,
   automaticSilentRenew: true,
+  useRefreshTokens: true,
   response_type: "code",
   scope: "openid profile email",
   ...(userStore ? { userStore } : {}),
