@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "rsbuild dev",
+    "dev": "rsbuild dev --port 5173 --host 127.0.0.1",
     "build": "rsbuild build",
-    "preview": "rsbuild preview"
+    "preview": "rsbuild preview --port 5173 --host 127.0.0.1"
   },
   "dependencies": {
     "oidc-client-ts": "^3.4.1",
@@ -15,7 +15,16 @@
     "react-router-dom": "^6.28.0"
   },
   "devDependencies": {
+    "@argos/frontend-config": "github:ErVaaL/argos-frontend-config#main",
+    "@module-federation/rsbuild-plugin": "^0.22.0",
+    "@rsbuild/core": "^1.7.2",
+    "@rsbuild/plugin-react": "^1.4.2",
+    "@tailwindcss/postcss": "^4.1.18",
     "@types/react": "^19.2.7",
-    "@types/react-dom": "^19.2.3"
+    "@types/react-dom": "^19.2.3",
+    "autoprefixer": "^10.4.23",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.9.3"
   }
 }
