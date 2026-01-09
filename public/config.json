@@ -1,0 +1,6 @@
+{
+  "apiBaseUrl": "/api/v1",
+  "remoteQueryUrl": "http://127.0.0.1:5174/remoteEntry.js",
+  "remoteReportUrl": "http://127.0.0.1:5175/remoteEntry.js",
+  "assetPrefix": "/"
+}
