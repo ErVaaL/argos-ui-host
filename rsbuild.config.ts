@@ -8,14 +8,25 @@ const moduleFederation =
   (mf as any).pluginModuleFederation ??
   (mf as any).default;
 
+const BASE = process.env.ASSET_PREFIX ?? "/";
+
+const REMOTE_QUERY =
+  process.env.REMOTE_QUERY_URL ?? "http://127.0.0.1:5174/remoteEntry.js";
+
+const REMOTE_REPORT =
+  process.env.REMOTE_REPORT_URL ?? "http://127.0.0.1:5175/remoteEntry.js";
+
 export default defineConfig({
+  output: {
+    assetPrefix: BASE,
+  },
   plugins: [
     pluginReact(),
     moduleFederation({
       name: "host",
       remotes: {
-        remoteQuery: "remoteQuery@http://127.0.0.1:5174/remoteEntry.js",
-        remoteReport: "remoteReport@http://127.0.0.1:5175/remoteEntry.js",
+        remoteQuery: `remoteQuery@${REMOTE_QUERY}`,
+        remoteReport: `remoteReport@${REMOTE_REPORT}`,
       },
       shared: {
         react: { singleton: true, eager: true, requiredVersion: false },

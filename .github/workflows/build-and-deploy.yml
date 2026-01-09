@@ -1,0 +1,74 @@
+name: build-and-deploy
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+
+      - name: Install
+        run: yarn install --frozen-lockfile
+
+      - name: Build
+        run: yarn build
+        env:
+          ASSET_PREFIX: /${{ github.event.repository.name}}/
+          REMOTE_QUERY_URL: https://ervaal.github.io/argos-remote-query/remoteEntry.js
+          REMOTE_REPORT_URL: https://ervaal.github.io/argos-remote-report/remoteEntry.js
+
+      - name: Upload artifact
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+  deploy:
+    if: github.event_name == 'push'
+    needs: build
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+
+      - run: yarn install --frozen-lockfile
+      - run: yarn build
+        env:
+          ASSET_PREFIX: /${{ github.event.repository.name}}/
+          REMOTE_QUERY_URL: https://ervaal.github.io/argos-remote-query/remoteEntry.js
+          REMOTE_REPORT_URL: https://ervaal.github.io/argos-remote-report/remoteEntry.js
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
