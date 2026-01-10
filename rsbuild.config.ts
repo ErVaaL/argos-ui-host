@@ -25,34 +25,9 @@ export default defineConfig({
     moduleFederation({
       name: "host",
       remotes: {
-        remoteQuery: `promise new Promise((resolve, reject) => {
-         const cfg = window.__ARGOS_CONFIG__;
-         const url = cfg?.remoteQueryUrl;
-         if (!url) return reject(new Error("remoteQueryUrl missing in config.json"));
-
-         const s = document.createElement("script");
-         s.src = url;
-         s.type = "text/javascript";
-         s.async = true;
-         s.crossOrigin = "anonymous";
-         s.onload = () => resolve("remoteQuery@" + url);
-         s.onerror = () => reject(new Error("Failed to load " + url));
-         document.head.appendChild(s);
-       })`,
-        remoteReport: `promise new Promise((resolve, reject) => {
-         const cfg = window.__ARGOS_CONFIG__;
-         const url = cfg?.remoteReportUrl;
-         if (!url) return reject(new Error("remoteReportUrl missing in config.json"));
-
-         const s = document.createElement("script");
-         s.src = url;
-         s.type = "text/javascript";
-         s.async = true;
-         s.crossOrigin = "anonymous";
-         s.onload = () => resolve("remoteReport@" + url);
-         s.onerror = () => reject(new Error("Failed to load " + url));
-         document.head.appendChild(s);
-       })`,
+        remoteQuery: "remoteQuery@http://query.argos.localhost/remoteEntry.js",
+        remoteReport:
+          "remoteReport@http://report.argos.localhost/remoteEntry.js",
       },
       shared: {
         react: { singleton: true, requiredVersion: false },
