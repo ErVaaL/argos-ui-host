@@ -44,7 +44,7 @@ function RequireAuth({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  const apiBase = "http://localhost:80/api";
+  const apiBase = window.__ARGOS_CONFIG__?.apiBaseUrl ?? "http://localhost:80/api";
   const { accessToken, user, logout } = useAuth();
 
   return (
