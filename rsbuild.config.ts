@@ -8,7 +8,7 @@ const moduleFederation =
   (mf as any).pluginModuleFederation ??
   (mf as any).default;
 
-const BASE = process.env.ASSET_PREFIX ?? "/";
+const BASE = process.env.ASSET_PREFIX ?? "auto";
 
 const REMOTE_QUERY =
   process.env.REMOTE_QUERY_URL ?? "http://127.0.0.1:5174/remoteEntry.js";
@@ -26,30 +26,33 @@ export default defineConfig({
       name: "host",
       remotes: {
         remoteQuery: `promise new Promise((resolve, reject) => {
-      const cfg = window.__ARGOS_CONFIG__;
-      const url = cfg?.remoteQueryUrl;
-      if (!url) return reject(new Error("remoteQueryUrl missing in config.json"));
+         const cfg = window.__ARGOS_CONFIG__;
+         const url = cfg?.remoteQueryUrl;
+         if (!url) return reject(new Error("remoteQueryUrl missing in config.json"));
 
-      const s = document.createElement("script");
-      s.src = url;
-      s.type = "text/javascript";
-      s.async = true;
-      s.crossOrigin = "anonymous";
-      s.onload = () => resolve("remoteQuery@" + url);
-      s.onerror = () => reject(new Error("Failed to load " + url));
-      document.head.appendChild(s);
-      })`,
-        remoteReport: `promise new Promise(resolve => {
-      const cfg = window.__ARGOS_CONFIG__;
-      const url = cfg?.remoteReportUrl;
-      if (!url) throw new Error("remoteReportUrl missing in config.json");
+         const s = document.createElement("script");
+         s.src = url;
+         s.type = "text/javascript";
+         s.async = true;
+         s.crossOrigin = "anonymous";
+         s.onload = () => resolve("remoteQuery@" + url);
+         s.onerror = () => reject(new Error("Failed to load " + url));
+         document.head.appendChild(s);
+       })`,
+        remoteReport: `promise new Promise((resolve, reject) => {
+         const cfg = window.__ARGOS_CONFIG__;
+         const url = cfg?.remoteReportUrl;
+         if (!url) return reject(new Error("remoteReportUrl missing in config.json"));
 
-      const s = document.createElement('script');
-      s.src = url;
-      s.onload = () => resolve('remoteReport@' + url);
-      s.onerror = () => { throw new Error('Failed to load ' + url); };
-      document.head.appendChild(s);
-    })`,
+         const s = document.createElement("script");
+         s.src = url;
+         s.type = "text/javascript";
+         s.async = true;
+         s.crossOrigin = "anonymous";
+         s.onload = () => resolve("remoteReport@" + url);
+         s.onerror = () => reject(new Error("Failed to load " + url));
+         document.head.appendChild(s);
+       })`,
       },
       shared: {
         react: { singleton: true, requiredVersion: false },
@@ -70,7 +73,7 @@ export default defineConfig({
     port: 5173,
     historyApiFallback: true,
     proxy: {
-      "/api": {
+      "/api/v1": {
         target: "http://localhost:80",
         changeOrigin: true,
         secure: false,
