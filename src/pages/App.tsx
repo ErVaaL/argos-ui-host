@@ -7,8 +7,17 @@ import { LogoutCallback } from "../auth/LogoutCallback";
 import { SilentRenew } from "../auth/SilentRenew";
 import { useAuth } from "../auth/AuthContext";
 
-const RemoteQueryApp = React.lazy(() => import("remoteQuery/App"));
-const RemoteReportApp = React.lazy(() => import("remoteReport/App"));
+const RemoteQueryApp = React.lazy(() =>
+  import("remoteQuery/App").then((m: any) => ({
+    default: m?.default?.default ?? m?.default ?? m?.App ?? m,
+  })),
+);
+
+const RemoteReportApp = React.lazy(() =>
+  import("remoteReport/App").then((m: any) => ({
+    default: m?.default?.default ?? m?.default ?? m?.App ?? m,
+  })),
+);
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
   const { accessToken, loading, login } = useAuth();

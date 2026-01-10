@@ -11,11 +11,13 @@ declare global {
 export {};
 
 declare module "remoteQuery/App" {
-  const C: (props: { apiBase?: string; accessToken?: string | null }) => any;
+  import type { ComponentType } from "react";
+  const C: ComponentType<{ apiBase?: string; accessToken?: string | null }>;
   export default C;
 }
 
 declare module "remoteReport/App" {
-  const C: (props: { apiBase?: string; accessToken?: string | null }) => any;
+  import type { ComponentType } from "react";
+  const C: ComponentType<{ apiBase?: string; accessToken?: string | null }>;
   export default C;
 }
