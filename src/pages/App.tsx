@@ -7,17 +7,8 @@ import { LogoutCallback } from "../auth/LogoutCallback";
 import { SilentRenew } from "../auth/SilentRenew";
 import { useAuth } from "../auth/AuthContext";
 
-const RemoteQueryApp = React.lazy(() =>
-  import("remoteQuery/App").then((m: any) => ({
-    default: m?.default?.default ?? m?.default ?? m?.App ?? m,
-  })),
-);
-
-const RemoteReportApp = React.lazy(() =>
-  import("remoteReport/App").then((m: any) => ({
-    default: m?.default?.default ?? m?.default ?? m?.App ?? m,
-  })),
-);
+const RemoteQueryApp = React.lazy(() => import("remoteQuery/App"));
+const RemoteReportApp = React.lazy(() => import("remoteReport/App"));
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
   const { accessToken, loading, login } = useAuth();
@@ -44,7 +35,7 @@ function RequireAuth({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  const apiBase = window.__ARGOS_CONFIG__?.apiBaseUrl ?? "http://localhost:80/api";
+  const apiBase = window.__ARGOS_CONFIG__?.apiBaseUrl ?? "/api/v1";
   const { accessToken, user, logout } = useAuth();
 
   return (
